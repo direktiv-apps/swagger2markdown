@@ -1,0 +1,144 @@
+swagger: "2.0"
+info:
+  description: Convert swagger.yaml to markdown
+  title: swagger2markdown
+  version: 1.0.0
+  x-direktiv-meta:
+    container: direktiv/swagger2markdown
+    maintainer: |-
+      [direktiv.io](https://www.direktiv.io) 
+    issues: https://github.com/direktiv-apps/swagger2markdown/issues
+    url: https://github.com/direktiv-apps/swagger2markdown 
+    category: Documents
+    license: |-
+      [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+    long-description: |-
+      Converts a swagger file into a markdown file based on the provided template. The swagger file as well as the template have to be provided as files.
+consumes:
+- application/json
+produces:
+- application/json
+schemes:
+- http
+paths:
+  /: 
+    delete:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          description: |
+            On cancel Direktiv sends a DELETE request to
+            the action with id in the header
+      x-direktiv:
+        cancel: echo 'cancel {{ .DirektivActionID }}'
+      responses:
+        200:
+    post:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          description: |
+            direktiv action id is an UUID. 
+            For development it can be set to 'development'
+        - name: Direktiv-TempDir
+          in: header
+          type: string
+          description: |
+            direktiv temp dir is the working directory for that request
+            For development it can be set to e.g. '/tmp'
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - template
+            properties:
+              swagger:
+                type: string
+                description: Path of the swagger YAML file to process.
+                example: swagger.yaml
+                default: swagger.yaml
+              template:
+                type: string
+                description: Path of the template to use for markdown generation.
+                example: template.tmpl
+      # direktiv code generation is configured here
+      x-direktiv-function: |-
+        functions:
+          - id: swagger2markdown
+            image: direktiv/swagger2markdown
+            type: knative-workflow
+      x-direktiv-examples:
+        - title: Basic
+          content: |-
+            - id: createdoc
+                 type: action
+                 action:
+                  function: swagger2markdown
+                  files:
+                  - key: swagger.yaml
+                    scope: workflow
+                  - key: template
+                    scope: workflow 
+                  input: 
+                    template: template
+      x-direktiv:  
+        cmds:
+        - action: exec
+          exec: mkdir -p templates/markdown
+        - action: exec
+          exec: mv {{ .Template }} templates/markdown
+        - action: exec
+          exec: swagger generate markdown -f {{ default "swagger.yaml" .Swagger }} --output=out/instance/readme.md --template-dir=templates/ --with-flatten=full
+        - action: exec
+          exec:  base64 -w0 out/instance/readme.md 
+          print: false
+        output: |
+          {
+            "readme": "{{ index (index . 3) "result" }}"
+          }
+      x-direktiv-errors:
+        io.direktiv.command.error: Command execution failed
+        io.direktiv.output.error: Template error for output generation of the service
+        io.direktiv.ri.error: Can not create information object from request
+      responses:
+        200:
+          description: nice greeting
+          examples:
+            basic:
+              readme: 2CgoKIyBzd2FnZ2V...gfCAgfAoKCg==
+          schema:
+            type: object
+            properties:
+              readme:
+                type: string
+                description: Base64 encoded markdown file.
+                example: CgoKIyBzd2FnZ2V...gfCAgfAoKCg==
+        default:
+          description: generic error response
+          headers:
+            Direktiv-ErrorCode:
+              type: string
+            Direktiv-ErrorMessage:
+              type: string
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  direktivFile:
+    type: object
+    x-go-type:
+      type: DirektivFile
+      import:
+        package: github.com/direktiv/apps/go/pkg/apps 
+  error:
+    type: object
+    required:
+      - errorCode
+      - errorMessage
+    properties:
+      errorCode:
+        type: string
+      errorMessage:
+        type: string
