@@ -4,7 +4,7 @@
 Convert swagger.yaml to markdown
 
 ---
-- #### Category: Documents
+- #### Categories: tools
 - #### Image: direktiv/swagger2markdown 
 - #### License: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - #### Issue Tracking: https://github.com/direktiv-apps/swagger2markdown/issues
