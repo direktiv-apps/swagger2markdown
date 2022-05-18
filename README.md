@@ -47,7 +47,7 @@ Converts a swagger file into a markdown file based on the provided template. The
 [PostParamsBody](#post-params-body)
 
 ### Response
-  nice greeting
+  Returns markdown of the swagger.yaml file
 #### Reponse Types
     
   

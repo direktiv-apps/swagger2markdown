@@ -90,7 +90,7 @@ paths:
         - action: exec
           exec: mkdir -p templates/markdown
         - action: exec
-          exec: mv {{ .Template }} templates/markdown
+          exec: mv {{ .Template }} templates/markdown/docs.gotmpl
         - action: exec
           exec: swagger generate markdown -f {{ default "swagger.yaml" .Swagger }} --output=out/instance/readme.md --template-dir=templates/ --with-flatten=full
         - action: exec
@@ -106,7 +106,7 @@ paths:
         io.direktiv.ri.error: Can not create information object from request
       responses:
         200:
-          description: nice greeting
+          description: Returns markdown of the swagger.yaml
           examples:
             basic:
               readme: 2CgoKIyBzd2FnZ2V...gfCAgfAoKCg==

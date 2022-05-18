@@ -44,8 +44,9 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	resp := &PostOKBody{}
 
 	var (
-		err error
-		ret interface{}
+		err  error
+		ret  interface{}
+		cont bool
 	)
 
 	ri, err := apps.RequestinfoFromRequest(params.HTTPRequest)
@@ -68,7 +69,9 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	ret, err = runCommand0(ctx, accParams, ri)
 	responses = append(responses, ret)
 
-	if err != nil && true {
+	cont = convertTemplateToBool("<no value>", accParams, true)
+
+	if err != nil && !cont {
 		errName := cmdErr
 		return generateError(errName, err)
 	}
@@ -79,7 +82,9 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	ret, err = runCommand1(ctx, accParams, ri)
 	responses = append(responses, ret)
 
-	if err != nil && true {
+	cont = convertTemplateToBool("<no value>", accParams, true)
+
+	if err != nil && !cont {
 		errName := cmdErr
 		return generateError(errName, err)
 	}
@@ -90,7 +95,9 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	ret, err = runCommand2(ctx, accParams, ri)
 	responses = append(responses, ret)
 
-	if err != nil && true {
+	cont = convertTemplateToBool("<no value>", accParams, true)
+
+	if err != nil && !cont {
 		errName := cmdErr
 		return generateError(errName, err)
 	}
@@ -101,7 +108,9 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	ret, err = runCommand3(ctx, accParams, ri)
 	responses = append(responses, ret)
 
-	if err != nil && true {
+	cont = convertTemplateToBool("<no value>", accParams, true)
+
+	if err != nil && !cont {
 		errName := cmdErr
 		return generateError(errName, err)
 	}
@@ -120,7 +129,6 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	responseBytes := []byte(s)
 
 	// validate
-
 	resp.UnmarshalBinary(responseBytes)
 	err = resp.Validate(strfmt.Default)
 
@@ -178,7 +186,7 @@ func runCommand1(ctx context.Context,
 		params.Commands,
 	}
 
-	cmd, err := templateString(`mv {{ .Template }} templates/markdown`, at)
+	cmd, err := templateString(`mv {{ .Template }} templates/markdown/docs.gotmpl`, at)
 	if err != nil {
 		ir[resultKey] = err.Error()
 		return ir, err

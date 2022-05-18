@@ -33,7 +33,9 @@ func init() {
     "title": "swagger2markdown",
     "version": "1.0.0",
     "x-direktiv-meta": {
-      "category": "Documents",
+      "categories": [
+        "tools"
+      ],
       "container": "direktiv/swagger2markdown",
       "issues": "https://github.com/direktiv-apps/swagger2markdown/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
@@ -84,7 +86,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "nice greeting",
+            "description": "Returns markdown of the swagger.yaml",
             "schema": {
               "type": "object",
               "properties": {
@@ -124,7 +126,7 @@ func init() {
             },
             {
               "action": "exec",
-              "exec": "mv {{ .Template }} templates/markdown"
+              "exec": "mv {{ .Template }} templates/markdown/docs.gotmpl"
             },
             {
               "action": "exec",
@@ -145,7 +147,7 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: req\n     type: action\n     action:\n       function: swagger2markdown\n       input:\n        swagger: swagger.yaml",
+            "content": "- id: createdoc\n     type: action\n     action:\n      function: swagger2markdown\n      files:\n      - key: swagger.yaml\n        scope: workflow\n      - key: template\n        scope: workflow \n      input: \n        template: template",
             "title": "Basic"
           }
         ],
@@ -214,7 +216,9 @@ func init() {
     "title": "swagger2markdown",
     "version": "1.0.0",
     "x-direktiv-meta": {
-      "category": "Documents",
+      "categories": [
+        "tools"
+      ],
       "container": "direktiv/swagger2markdown",
       "issues": "https://github.com/direktiv-apps/swagger2markdown/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
@@ -265,7 +269,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "nice greeting",
+            "description": "Returns markdown of the swagger.yaml",
             "schema": {
               "type": "object",
               "properties": {
@@ -305,7 +309,7 @@ func init() {
             },
             {
               "action": "exec",
-              "exec": "mv {{ .Template }} templates/markdown"
+              "exec": "mv {{ .Template }} templates/markdown/docs.gotmpl"
             },
             {
               "action": "exec",
@@ -326,7 +330,7 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: req\n     type: action\n     action:\n       function: swagger2markdown\n       input:\n        swagger: swagger.yaml",
+            "content": "- id: createdoc\n     type: action\n     action:\n      function: swagger2markdown\n      files:\n      - key: swagger.yaml\n        scope: workflow\n      - key: template\n        scope: workflow \n      input: \n        template: template",
             "title": "Basic"
           }
         ],

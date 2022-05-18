@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/direktiv/apps/go v0.0.0-20220509001321-9d495928ed20
+	github.com/direktiv/apps/go v0.0.0-20220513021642-2837d7d9a745
 	github.com/go-openapi/errors v0.20.2
 	github.com/go-openapi/loads v0.21.1
 	github.com/go-openapi/runtime v0.24.1

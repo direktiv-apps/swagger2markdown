@@ -138,16 +138,19 @@ func runCmd(ctx context.Context, cmdString string, envs []string,
 	cmd.Dir = ri.Dir()
 	cmd.Env = append(os.Environ(), envs...)
 
-	fmt.Printf("ENVIRON!!! %v", cmd.Env)
-
 	if print {
 		ri.Logger().Infof("running command %v", cmd)
 	}
 
 	err = cmd.Run()
-
 	if err != nil {
 		ir[resultKey] = string(oerr.String())
+		if oerr.String() == "" {
+			ir[resultKey] = err.Error()
+		} else {
+			ri.Logger().Errorf(oerr.String())
+			err = fmt.Errorf(oerr.String())
+		}
 		return ir, err
 	}
 
