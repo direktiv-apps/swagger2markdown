@@ -106,7 +106,7 @@ paths:
         io.direktiv.ri.error: Can not create information object from request
       responses:
         200:
-          description: Returns markdown of the swagger.yaml
+          description: Returns markdown of the swagger.yaml. It stores the result in an instance variable 'readme.md' as well.
           examples:
             basic:
               readme: 2CgoKIyBzd2FnZ2V...gfCAgfAoKCg==
